@@ -1,0 +1,4 @@
+.env*.local
+.env.docker
+.next/
+node_modules/

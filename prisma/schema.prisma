@@ -1,0 +1,82 @@
+// =============================================================================
+// Prisma Schema — samba-access
+// Acesso apenas ao schema samba_school (auth + SSO tokens)
+// =============================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  schemas  = ["samba_school"]
+}
+
+// ─── samba_school ─────────────────────────────────────────────────────────────
+
+model Role {
+  id        Int        @id @default(autoincrement())
+  name      String     @unique @db.VarChar(50)
+  userRoles UserRole[]
+
+  @@map("roles")
+  @@schema("samba_school")
+}
+
+model User {
+  id                 Int                   @id @default(autoincrement())
+  name               String                @db.VarChar(100)
+  email              String                @unique @db.VarChar(150)
+  passwordHash       String                @map("password_hash") @db.VarChar(255)
+  isActive           Boolean               @default(true) @map("is_active")
+  mustChangePassword Boolean               @default(false) @map("must_change_password")
+  isAdmin            Boolean               @default(false) @map("is_admin")
+  avatarUrl          String?               @map("avatar_url")
+  bio                String?               @db.VarChar(200)
+  createdAt          DateTime              @default(now()) @map("created_at")
+  userRoles          UserRole[]
+  ssoTokens          SsoToken[]
+  projectAccess      UserProjectAccess[]   @relation("UserAccess")
+  grantedAccess      UserProjectAccess[]   @relation("GrantedBy")
+
+  @@map("users")
+  @@schema("samba_school")
+}
+
+model UserProjectAccess {
+  userId    Int      @map("user_id")
+  project   String   @db.VarChar(30)
+  grantedBy Int?     @map("granted_by")
+  grantedAt DateTime @default(now()) @map("granted_at")
+  user      User     @relation("UserAccess", fields: [userId], references: [id], onDelete: Cascade)
+  granter   User?    @relation("GrantedBy", fields: [grantedBy], references: [id], onDelete: SetNull)
+
+  @@id([userId, project])
+  @@map("user_project_access")
+  @@schema("samba_school")
+}
+
+model UserRole {
+  userId Int  @map("user_id")
+  roleId Int  @map("role_id")
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role   Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@id([userId, roleId])
+  @@map("user_roles")
+  @@schema("samba_school")
+}
+
+model SsoToken {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    Int      @map("user_id")
+  target    String   @db.VarChar(50)
+  used      Boolean  @default(false)
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sso_tokens")
+  @@schema("samba_school")
+}
