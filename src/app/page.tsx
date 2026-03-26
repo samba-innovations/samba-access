@@ -7,6 +7,8 @@ import { NavLogo } from "@/components/NavLogo";
 import { NavUserMenu } from "@/components/NavUserMenu";
 import Image from "next/image";
 
+export const dynamic = "force-dynamic";
+
 export default async function HomePage() {
   const session = await getSession();
   if (!session) redirect("/login");
