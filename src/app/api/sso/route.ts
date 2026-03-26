@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
         user: {
           include: {
             userRoles: { include: { role: true } },
-            userProjectAccess: true,
+            projectAccess: true,
           },
         },
       },
@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
     const user = ssoToken.user
     const role = user.userRoles[0]?.role.name ?? 'TEACHER'
     const DEFAULT_PROJECTS = ['code', 'edvance']
-    const explicitProjects = user.userProjectAccess.map((a: { project: string }) => a.project)
+    const explicitProjects = user.projectAccess.map((a: { project: string }) => a.project)
     const projects = [...new Set([...DEFAULT_PROJECTS, ...explicitProjects])]
 
     return NextResponse.json({
