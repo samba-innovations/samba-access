@@ -15,7 +15,10 @@ export async function POST(request: NextRequest) {
       where: { id: token },
       include: {
         user: {
-          include: { userRoles: { include: { role: true } } },
+          include: {
+            userRoles: { include: { role: true } },
+            userProjectAccess: true,
+          },
         },
       },
     })
@@ -40,6 +43,9 @@ export async function POST(request: NextRequest) {
 
     const user = ssoToken.user
     const role = user.userRoles[0]?.role.name ?? 'TEACHER'
+    const DEFAULT_PROJECTS = ['code', 'edvance']
+    const explicitProjects = user.userProjectAccess.map((a: { project: string }) => a.project)
+    const projects = [...new Set([...DEFAULT_PROJECTS, ...explicitProjects])]
 
     return NextResponse.json({
       user: {
@@ -48,6 +54,8 @@ export async function POST(request: NextRequest) {
         email: user.email,
         role,
         mustChangePassword: user.mustChangePassword,
+        isAdmin: user.isAdmin,
+        projects,
       },
     })
   } catch {
