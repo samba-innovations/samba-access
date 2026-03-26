@@ -12,7 +12,7 @@ const SYSTEMS = [
     key: "code",
     name: "samba code",
     description: "Registro e gestão de ocorrências escolares com histórico completo por aluno.",
-    url: process.env.NEXT_PUBLIC_URL_CODE!,
+    url: (process.env.URL_CODE ?? process.env.NEXT_PUBLIC_URL_CODE)!,
     gradient: "from-[#5e2c9c] to-[#ffc845]",
     accent: "#5e2c9c",
     logo: "/imgs/code-logo2.svg",
@@ -23,7 +23,7 @@ const SYSTEMS = [
     key: "edvance",
     name: "samba edvance",
     description: "Registro e gestão de simulados padronizados.",
-    url: process.env.NEXT_PUBLIC_URL_EDVANCE!,
+    url: (process.env.URL_EDVANCE ?? process.env.NEXT_PUBLIC_URL_EDVANCE)!,
     gradient: "from-[#00577a] to-[#f57c00]",
     accent: "#00577a",
     logo: "/imgs/edvance-logo2.svg",
@@ -34,7 +34,7 @@ const SYSTEMS = [
     key: "flourish",
     name: "samba flourish",
     description: "Gerenciamento de hortas IoT com monitoramento em tempo real e histórico de dados ambientais.",
-    url: process.env.NEXT_PUBLIC_URL_FLOURISH!,
+    url: (process.env.URL_FLOURISH ?? process.env.NEXT_PUBLIC_URL_FLOURISH)!,
     gradient: "from-[#95c11f] to-[#c5e84a]",
     accent: "#95c11f",
     logo: "/imgs/flourish-logo2.svg",
@@ -50,7 +50,7 @@ export default async function HomePage() {
   // Filtra sistemas que o usuário tem acesso e gera tokens SSO
   const accessibleSystems = SYSTEMS.filter(s => session.projects?.includes(s.key) ?? s.key !== "flourish");
 
-  const adminUrl = process.env.NEXT_PUBLIC_URL_ADMIN ?? null;
+  const adminUrl = process.env.URL_ADMIN ?? process.env.NEXT_PUBLIC_URL_ADMIN ?? null;
 
   const [systemsWithTokens, avatarUrl, adminToken] = await Promise.all([
     Promise.all(
