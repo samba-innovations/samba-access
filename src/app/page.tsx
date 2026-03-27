@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 import { getSession } from "@/lib/auth";
 import { createSsoToken, getAvatarUrl } from "@/lib/actions";
 import { SystemCards } from "@/components/SystemCards";
@@ -54,16 +55,27 @@ export default async function HomePage() {
 
   const adminUrl = process.env.URL_ADMIN ?? null;
 
-  const [systemsWithTokens, avatarUrl, adminToken] = await Promise.all([
-    Promise.all(
-      accessibleSystems.map(async (sys) => {
-        const token = await createSsoToken(session.id, sys.key);
-        return { ...sys, token: token ?? "" };
-      })
-    ),
-    getAvatarUrl(session.id),
-    session.isAdmin && adminUrl ? createSsoToken(session.id, "admin") : Promise.resolve(null),
-  ]);
+  let systemsWithTokens: typeof accessibleSystems & { token: string }[];
+  let avatarUrl: string | null;
+  let adminToken: string | null;
+
+  try {
+    [systemsWithTokens, avatarUrl, adminToken] = await Promise.all([
+      Promise.all(
+        accessibleSystems.map(async (sys) => {
+          const token = await createSsoToken(session.id, sys.key);
+          return { ...sys, token: token ?? "" };
+        })
+      ),
+      getAvatarUrl(session.id),
+      session.isAdmin && adminUrl ? createSsoToken(session.id, "admin") : Promise.resolve(null),
+    ]);
+  } catch {
+    // JWT com user_id que não existe mais no banco — limpa cookie e redireciona
+    const cookieStore = await cookies();
+    cookieStore.delete("samba_token");
+    redirect("/login");
+  }
 
   const firstName = session.name.split(" ")[0];
   const hour = new Date().getHours();
