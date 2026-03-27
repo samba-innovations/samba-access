@@ -55,9 +55,9 @@ export default async function HomePage() {
 
   const adminUrl = process.env.URL_ADMIN ?? null;
 
-  let systemsWithTokens: typeof accessibleSystems & { token: string }[];
-  let avatarUrl: string | null;
-  let adminToken: string | null;
+  let systemsWithTokens: Array<(typeof accessibleSystems)[number] & { token: string }> = [];
+  let avatarUrl: string | null = null;
+  let adminToken: string | null = null;
 
   try {
     [systemsWithTokens, avatarUrl, adminToken] = await Promise.all([
