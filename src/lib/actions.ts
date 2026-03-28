@@ -73,7 +73,7 @@ export async function login(prevState: unknown, formData: FormData) {
 
 export async function logout() {
   const cookieStore = await cookies()
-  cookieStore.delete(COOKIE_NAME)
+  cookieStore.set(COOKIE_NAME, '', { ...cookieOptions(0), maxAge: 0 })
   redirect('/login')
 }
 
