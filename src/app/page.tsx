@@ -1,5 +1,4 @@
 import { redirect } from "next/navigation";
-import { cookies } from "next/headers";
 import { getSession } from "@/lib/auth";
 import { createSsoToken, getAvatarUrl } from "@/lib/actions";
 import { SystemCards } from "@/components/SystemCards";
@@ -71,10 +70,8 @@ export default async function HomePage() {
       session.isAdmin && adminUrl ? createSsoToken(session.id, "admin") : Promise.resolve(null),
     ]);
   } catch {
-    // JWT com user_id que não existe mais no banco — limpa cookie e redireciona
-    const cookieStore = await cookies();
-    cookieStore.delete("samba_token");
-    redirect("/login");
+    // JWT com user_id que não existe mais no banco — delega limpeza de cookie ao route handler
+    redirect("/api/clear-session");
   }
 
   const firstName = session.name.split(" ")[0];
