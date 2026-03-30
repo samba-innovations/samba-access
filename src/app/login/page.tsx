@@ -3,7 +3,7 @@
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { motion } from "framer-motion";
-import { Loader2, Lock, Mail, ShieldCheck, Fingerprint, Globe } from "lucide-react";
+import { Loader2, Lock, Mail, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import { login } from "@/lib/actions";
 
@@ -15,7 +15,7 @@ function SubmitButton() {
       whileTap={!pending ? { scale: 0.985 } : {}}
       disabled={pending}
       type="submit"
-      className="w-full h-[52px] bg-primary text-white rounded-2xl font-semibold transition-all shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:bg-[#0047b8] mt-1 flex items-center justify-center gap-2.5 disabled:opacity-60 disabled:cursor-not-allowed text-[13px] tracking-wide"
+      className="w-full h-[52px] bg-[#0053d4] text-white rounded-xl font-semibold transition-all shadow-lg shadow-[#0053d4]/20 hover:bg-[#0047b8] hover:shadow-[#0053d4]/35 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed text-sm tracking-wide"
     >
       {pending ? (
         <>
@@ -24,8 +24,8 @@ function SubmitButton() {
         </>
       ) : (
         <>
-          <Lock className="w-3.5 h-3.5" />
-          Entrar com segurança
+          Entrar
+          <ArrowRight className="w-4 h-4" />
         </>
       )}
     </motion.button>
@@ -36,185 +36,198 @@ export default function LoginPage() {
   const [state, action] = useActionState(login, null);
 
   return (
-    <div className="min-h-screen flex bg-background">
+    <div className="min-h-screen flex">
 
       {/* ── Left brand panel ───────────────────────────────────────────── */}
-      <div className="hidden lg:flex lg:w-[54%] relative overflow-hidden flex-col">
-        {/* Deep gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#001a5c] via-[#0040b8] to-[#0053d4]" />
+      <div className="hidden lg:flex lg:w-[46%] relative overflow-hidden flex-col bg-[#0053d4]">
+        {/* Subtle depth gradient */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#0060f0] via-[#0053d4] to-[#003ba0]" />
 
-        {/* Dot grid overlay */}
-        <div className="absolute inset-0 dot-grid opacity-30" />
+        {/* Diagonal line pattern */}
+        <div
+          className="absolute inset-0 opacity-[0.05]"
+          style={{
+            backgroundImage: `repeating-linear-gradient(
+              -45deg,
+              white 0px,
+              white 1px,
+              transparent 1px,
+              transparent 36px
+            )`,
+          }}
+        />
 
-        {/* Glow orbs */}
-        <div className="absolute -top-32 -left-32 w-[500px] h-[500px] bg-[#4d9fff]/20 rounded-full blur-[120px]" />
-        <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-[#0028a0]/60 rounded-full blur-[100px]" />
+        {/* Bottom-right glow */}
+        <div className="absolute -bottom-24 -right-24 w-[360px] h-[360px] bg-white/5 rounded-full blur-[80px]" />
 
         {/* Content */}
-        <div className="relative z-10 flex flex-col h-full px-14 py-12">
-          {/* Logo */}
+        <div className="relative z-10 flex flex-col h-full px-12 py-11">
+          {/* Top: Logotype */}
           <Image
             src="/imgs/innvtns-logotipo2.svg"
             alt="Samba Innovations"
-            width={280}
-            height={44}
-            className="h-10 w-auto"
+            width={220}
+            height={34}
+            className="h-8 w-auto"
             priority
           />
 
-          {/* Center text */}
-          <div className="flex-1 flex flex-col justify-center gap-6 max-w-sm">
-            <div className="w-14 h-14 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center backdrop-blur-sm">
-              <ShieldCheck className="w-7 h-7 text-white" strokeWidth={1.5} />
+          {/* Center: Icon mark + headline */}
+          <div className="flex-1 flex flex-col justify-center">
+            {/* in. icon mark */}
+            <div className="mb-9">
+              <Image
+                src="/imgs/invtns-logo1.png"
+                alt="Samba Innovations"
+                width={88}
+                height={88}
+                className="rounded-2xl"
+              />
             </div>
 
-            <div>
-              <h1 className="text-4xl font-extrabold text-white leading-tight tracking-tight">
-                Acesso<br />Unificado
-              </h1>
-              <p className="text-white/60 mt-3 text-sm leading-relaxed">
-                Portal de entrada único para todos os sistemas educacionais da Escola Cabral.
-              </p>
-            </div>
+            <h1 className="text-[46px] font-black text-white leading-[1.05] tracking-tight">
+              Acesso<br />Unificado
+            </h1>
 
-            {/* Feature list */}
-            <div className="flex flex-col gap-3 mt-2">
-              {[
-                { icon: ShieldCheck, text: "Autenticação segura com JWT" },
-                { icon: Fingerprint, text: "SSO entre todos os sistemas" },
-                { icon: Globe, text: "Acesso centralizado e rastreável" },
-              ].map(({ icon: Icon, text }) => (
-                <div key={text} className="flex items-center gap-3">
-                  <div className="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center shrink-0">
-                    <Icon className="w-3.5 h-3.5 text-white/80" strokeWidth={1.5} />
-                  </div>
-                  <span className="text-white/70 text-xs font-medium">{text}</span>
-                </div>
-              ))}
-            </div>
+            <p className="text-white/50 mt-5 text-[15px] leading-relaxed max-w-[280px]">
+              Portal de entrada único para todos os sistemas da Escola Cabral.
+            </p>
           </div>
+
+          {/* Bottom label */}
+          <span className="text-white/25 text-[11px] font-semibold tracking-widest uppercase">
+            Escola Cabral
+          </span>
         </div>
       </div>
 
       {/* ── Right form panel ───────────────────────────────────────────── */}
-      <div className="flex-1 flex flex-col relative overflow-hidden">
-        {/* Subtle background */}
-        <div className="absolute inset-0 dot-grid opacity-40 dark:opacity-20" />
-        <div className="absolute -top-40 -right-40 w-[500px] h-[500px] bg-primary/8 dark:bg-primary/12 rounded-full blur-[140px]" />
+      <div className="flex-1 flex flex-col bg-white dark:bg-[#07090f]">
+        {/* Mobile logo */}
+        <div className="lg:hidden px-8 pt-8 flex items-center gap-3">
+          <Image
+            src="/imgs/invtns-logo1.png"
+            alt="Samba Innovations"
+            width={32}
+            height={32}
+            className="rounded-lg"
+          />
+          <Image
+            src="/imgs/invtns-logotipo.png"
+            alt="Samba Innovations"
+            width={160}
+            height={24}
+            className="h-5 w-auto dark:hidden"
+          />
+          <Image
+            src="/imgs/innvtns-logotipo2.svg"
+            alt="Samba Innovations"
+            width={160}
+            height={24}
+            className="h-5 w-auto hidden dark:block"
+          />
+        </div>
 
-        <div className="relative z-10 flex flex-col h-full">
-          {/* Mobile logo */}
-          <div className="lg:hidden px-8 pt-8 pb-4">
-            <Image
-              src="/imgs/innvtns-logotipo.svg"
-              alt="Samba Innovations"
-              width={120}
-              height={20}
-              className="h-5 w-auto dark:hidden"
-            />
-            <Image
-              src="/imgs/innvtns-logotipo2.svg"
-              alt="Samba Innovations"
-              width={120}
-              height={20}
-              className="h-5 w-auto hidden dark:block"
-            />
-          </div>
+        {/* Form area */}
+        <div className="flex-1 flex items-center justify-center px-8 py-12">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
+            className="w-full max-w-[380px]"
+          >
+            {/* Header */}
+            <div className="mb-8">
+              <h2 className="text-[26px] font-bold text-gray-900 dark:text-white tracking-tight leading-tight">
+                Bem-vindo de volta
+              </h2>
+              <p className="text-gray-500 dark:text-gray-400 text-sm mt-1.5">
+                Entre com suas credenciais institucionais
+              </p>
+            </div>
 
-          {/* Form centered */}
-          <div className="flex-1 flex items-center justify-center px-6 py-12">
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
-              className="w-full max-w-[400px]"
-            >
-              {/* Header */}
-              <div className="mb-9">
-                <h2 className="text-[26px] font-extrabold text-foreground tracking-tight">Bem-vindo de volta</h2>
-                <p className="text-muted-foreground text-sm mt-1.5">
-                  Entre com suas credenciais institucionais.
-                </p>
+            {/* Form */}
+            <form action={action} className="space-y-5">
+              {state?.error && (
+                <motion.div
+                  initial={{ opacity: 0, y: -6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="px-4 py-3 bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/25 text-red-600 dark:text-red-400 rounded-lg text-sm"
+                >
+                  {state.error}
+                </motion.div>
+              )}
+
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                >
+                  E-mail institucional
+                </label>
+                <div className="relative">
+                  <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    required
+                    placeholder="seu@escolacabral.com.br"
+                    className="w-full h-11 pl-10 pr-4 rounded-lg bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 focus:border-[#0053d4] focus:ring-2 focus:ring-[#0053d4]/10 outline-none transition-all placeholder:text-gray-300 dark:placeholder:text-gray-600 text-gray-900 dark:text-white text-sm"
+                  />
+                </div>
               </div>
 
-              {/* Form */}
-              <form action={action} className="space-y-4">
-                {state?.error && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -6 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="px-4 py-3 bg-red-500/8 border border-red-500/20 text-red-600 dark:text-red-400 rounded-xl text-sm font-medium"
-                  >
-                    {state.error}
-                  </motion.div>
-                )}
-
-                <div className="space-y-1.5">
-                  <label htmlFor="email" className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider px-0.5">
-                    E-mail institucional
-                  </label>
-                  <div className="relative">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/60 pointer-events-none" />
-                    <input
-                      id="email"
-                      name="email"
-                      type="email"
-                      autoComplete="email"
-                      required
-                      placeholder="seu@escolacabral.com.br"
-                      className="w-full h-12 pl-11 pr-4 rounded-xl bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/15 outline-none transition-all placeholder:text-muted-foreground/40 text-foreground text-sm card-glow"
-                    />
-                  </div>
+              <div>
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                >
+                  Senha
+                </label>
+                <div className="relative">
+                  <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                  <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    autoComplete="current-password"
+                    required
+                    placeholder="••••••••"
+                    className="w-full h-11 pl-10 pr-4 rounded-lg bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 focus:border-[#0053d4] focus:ring-2 focus:ring-[#0053d4]/10 outline-none transition-all placeholder:text-gray-300 dark:placeholder:text-gray-600 text-gray-900 dark:text-white text-sm"
+                  />
                 </div>
-
-                <div className="space-y-1.5">
-                  <label htmlFor="password" className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider px-0.5">
-                    Senha
-                  </label>
-                  <div className="relative">
-                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/60 pointer-events-none" />
-                    <input
-                      id="password"
-                      name="password"
-                      type="password"
-                      autoComplete="current-password"
-                      required
-                      placeholder="••••••••"
-                      className="w-full h-12 pl-11 pr-4 rounded-xl bg-card border border-border focus:border-primary focus:ring-2 focus:ring-primary/15 outline-none transition-all placeholder:text-muted-foreground/40 text-foreground text-sm card-glow"
-                    />
-                  </div>
-                </div>
-
-                <div className="pt-1">
-                  <SubmitButton />
-                </div>
-              </form>
-
-              {/* Divider + security note */}
-              <div className="mt-8 pt-6 border-t border-border/60 flex items-center justify-center gap-2 text-xs text-muted-foreground">
-                <ShieldCheck className="w-3.5 h-3.5 text-primary/50" strokeWidth={1.5} />
-                <span>Conexão protegida · Samba Innovations</span>
               </div>
-            </motion.div>
-          </div>
 
-          {/* Footer */}
-          <div className="relative z-10 pb-6 flex justify-center">
-            <Image
-              src="/imgs/innvtns-logotipo.svg"
-              alt="Samba Innovations"
-              width={100}
-              height={16}
-              className="h-4 w-auto opacity-20 dark:hidden"
-            />
-            <Image
-              src="/imgs/innvtns-logotipo2.svg"
-              alt="Samba Innovations"
-              width={100}
-              height={16}
-              className="h-4 w-auto opacity-15 hidden dark:block"
-            />
-          </div>
+              <div className="pt-1">
+                <SubmitButton />
+              </div>
+            </form>
+
+            {/* Bottom note */}
+            <p className="mt-10 text-center text-xs text-gray-300 dark:text-gray-700">
+              Conexão protegida · Samba Innovations
+            </p>
+          </motion.div>
+        </div>
+
+        {/* Footer logo */}
+        <div className="pb-7 flex justify-center">
+          <Image
+            src="/imgs/invtns-logotipo.png"
+            alt="Samba Innovations"
+            width={110}
+            height={16}
+            className="h-4 w-auto opacity-20 dark:hidden"
+          />
+          <Image
+            src="/imgs/innvtns-logotipo2.svg"
+            alt="Samba Innovations"
+            width={110}
+            height={16}
+            className="h-4 w-auto opacity-10 hidden dark:block"
+          />
         </div>
       </div>
     </div>
