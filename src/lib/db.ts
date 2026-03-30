@@ -3,10 +3,9 @@ import { PrismaClient } from '@prisma/client'
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient }
 
 function buildUrl() {
-  const url = new URL(process.env.DATABASE_URL!)
-  url.searchParams.set('connection_limit', '5')
-  url.searchParams.set('pool_timeout', '10')
-  return url.toString()
+  const base = process.env.DATABASE_URL!
+  const sep = base.includes('?') ? '&' : '?'
+  return `${base}${sep}connection_limit=5&pool_timeout=10`
 }
 
 export const prisma =
