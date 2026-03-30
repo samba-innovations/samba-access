@@ -12,6 +12,8 @@ RUN npm ci
 FROM node:20-slim AS builder
 WORKDIR /app
 ENV DATABASE_URL=postgresql://build:build@localhost:5432/build
+ARG NEXT_PUBLIC_URL_ACCESS
+ENV NEXT_PUBLIC_URL_ACCESS=${NEXT_PUBLIC_URL_ACCESS}
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN npx prisma generate
