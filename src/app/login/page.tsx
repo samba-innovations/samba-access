@@ -7,6 +7,12 @@ import { Loader2, Lock, Mail, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import { login } from "@/lib/actions";
 
+const PRODUCTS = [
+  { id: "code",    label: "samba code",    logo: "/imgs/code-logo2.svg" },
+  { id: "edvance", label: "samba edvance", logo: "/imgs/edvance-logo2.svg" },
+  { id: "flourish",label: "samba flourish",logo: "/imgs/flourish-logo2.svg" },
+];
+
 function SubmitButton() {
   const { pending } = useFormStatus();
   return (
@@ -15,18 +21,12 @@ function SubmitButton() {
       whileTap={!pending ? { scale: 0.985 } : {}}
       disabled={pending}
       type="submit"
-      className="w-full h-[52px] bg-[#0053d4] text-white rounded-xl font-semibold transition-all shadow-lg shadow-[#0053d4]/20 hover:bg-[#0047b8] hover:shadow-[#0053d4]/35 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed text-sm tracking-wide"
+      className="w-full h-12 bg-[#0053d4] text-white rounded-xl font-semibold transition-colors hover:bg-[#0047b8] flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed text-sm tracking-wide"
     >
       {pending ? (
-        <>
-          <Loader2 className="w-4 h-4 animate-spin" />
-          Autenticando…
-        </>
+        <><Loader2 className="w-4 h-4 animate-spin" />Autenticando…</>
       ) : (
-        <>
-          Entrar
-          <ArrowRight className="w-4 h-4" />
-        </>
+        <>Entrar<ArrowRight className="w-4 h-4" /></>
       )}
     </motion.button>
   );
@@ -36,123 +36,130 @@ export default function LoginPage() {
   const [state, action] = useActionState(login, null);
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen bg-[#07090f] flex relative overflow-hidden">
 
-      {/* ── Left brand panel ───────────────────────────────────────────── */}
-      <div className="hidden lg:flex lg:w-[46%] relative overflow-hidden flex-col bg-[#0053d4]">
-        {/* Subtle depth gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0060f0] via-[#0053d4] to-[#003ba0]" />
-
-        {/* Diagonal line pattern */}
+      {/* ── Mesh gradient ─────────────────────────────────────────── */}
+      <div className="absolute inset-0 pointer-events-none select-none">
+        <div className="absolute -top-48 -left-48 w-[700px] h-[700px] bg-[#0053d4]/15 rounded-full blur-[140px]" />
+        <div className="absolute -bottom-32 right-[5%] w-[600px] h-[600px] bg-[#002fa0]/20 rounded-full blur-[120px]" />
+        <div className="absolute top-[35%] -right-24 w-[380px] h-[380px] bg-[#0060ff]/8 rounded-full blur-[100px]" />
         <div
-          className="absolute inset-0 opacity-[0.05]"
+          className="absolute inset-0 opacity-[0.022]"
           style={{
-            backgroundImage: `repeating-linear-gradient(
-              -45deg,
-              white 0px,
-              white 1px,
-              transparent 1px,
-              transparent 36px
-            )`,
+            backgroundImage: "radial-gradient(circle, white 1px, transparent 1px)",
+            backgroundSize: "40px 40px",
           }}
         />
-
-        {/* Bottom-right glow */}
-        <div className="absolute -bottom-24 -right-24 w-[360px] h-[360px] bg-white/5 rounded-full blur-[80px]" />
-
-        {/* Content */}
-        <div className="relative z-10 flex flex-col h-full px-12 py-11">
-          {/* Top: Logotype */}
-          <Image
-            src="/imgs/innvtns-logotipo2.svg"
-            alt="Samba Innovations"
-            width={220}
-            height={34}
-            className="h-8 w-auto"
-            priority
-          />
-
-          {/* Center: Icon mark + headline */}
-          <div className="flex-1 flex flex-col justify-center">
-            {/* in. icon mark */}
-            <div className="mb-9 w-[88px] h-[88px] bg-white rounded-2xl shadow-xl shadow-black/20 flex items-center justify-center p-2">
-              <Image
-                src="/imgs/invtns-logo1.png"
-                alt="Samba Innovations"
-                width={72}
-                height={72}
-                className="rounded-xl"
-              />
-            </div>
-
-            <h1 className="text-[46px] font-black text-white leading-[1.05] tracking-tight">
-              Acesso<br />Unificado
-            </h1>
-
-            <p className="text-white/50 mt-5 text-[15px] leading-relaxed max-w-[280px]">
-              Portal de entrada único para todos os sistemas da Escola Cabral.
-            </p>
-          </div>
-
-          {/* Bottom label */}
-          <span className="text-white/25 text-[11px] font-semibold tracking-widest uppercase">
-            Escola Cabral
-          </span>
-        </div>
       </div>
 
-      {/* ── Right form panel ───────────────────────────────────────────── */}
-      <div className="flex-1 flex flex-col bg-white dark:bg-[#07090f]">
-        {/* Mobile logo */}
-        <div className="lg:hidden px-8 pt-8 flex items-center gap-3">
-          <Image
-            src="/imgs/invtns-logo1.png"
-            alt="Samba Innovations"
-            width={32}
-            height={32}
-            className="rounded-lg"
-          />
-          <Image
-            src="/imgs/invtns-logotipo.png"
-            alt="Samba Innovations"
-            width={160}
-            height={24}
-            className="h-5 w-auto dark:hidden"
-          />
-          <Image
-            src="/imgs/innvtns-logotipo2.svg"
-            alt="Samba Innovations"
-            width={160}
-            height={24}
-            className="h-5 w-auto hidden dark:block"
-          />
+      {/* ── Left panel ────────────────────────────────────────────── */}
+      <div className="hidden lg:flex flex-col justify-between w-[52%] relative z-10 px-16 py-14">
+
+        {/* Logo */}
+        <Image
+          src="/imgs/innvtns-logotipo2.svg"
+          alt="Samba Innovations"
+          width={200}
+          height={32}
+          className="h-7 w-auto"
+          priority
+        />
+
+        {/* Center */}
+        <div>
+          {/* Icon with blue glow */}
+          <div className="relative inline-flex mb-10">
+            <div className="absolute inset-0 scale-125 bg-[#0053d4]/30 rounded-3xl blur-2xl" />
+            <Image
+              src="/imgs/invtns-logo1.png"
+              alt="Samba Innovations"
+              width={84}
+              height={84}
+              className="relative rounded-[20px]"
+            />
+          </div>
+
+          <h1 className="text-[60px] font-black text-white leading-[0.97] tracking-tight mb-5">
+            Acesso<br />
+            <span className="text-[#4d9fff]">Unificado.</span>
+          </h1>
+
+          <p className="text-white/35 text-[15px] leading-relaxed max-w-[300px] mb-12">
+            Portal de entrada único para todos os sistemas educacionais da Escola Cabral.
+          </p>
+
+          {/* Product chips */}
+          <div className="flex flex-wrap gap-2.5">
+            {PRODUCTS.map((p) => (
+              <div
+                key={p.id}
+                className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white/[0.05] border border-white/[0.08]"
+              >
+                <Image
+                  src={p.logo}
+                  alt={p.label}
+                  width={18}
+                  height={18}
+                  className="shrink-0"
+                />
+                <span className="text-white/45 text-[11px] font-medium tracking-wide">
+                  {p.label}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
 
-        {/* Form area */}
-        <div className="flex-1 flex items-center justify-center px-8 py-12">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, ease: "easeOut" }}
-            className="w-full max-w-[380px]"
-          >
-            {/* Header */}
-            <div className="mb-8">
-              <h2 className="text-[26px] font-bold text-gray-900 dark:text-white tracking-tight leading-tight">
+        {/* Footer */}
+        <p className="text-white/15 text-xs tracking-wide">
+          Escola Cabral · {new Date().getFullYear()}
+        </p>
+      </div>
+
+      {/* ── Right: form ───────────────────────────────────────────── */}
+      <div className="flex-1 flex items-center justify-center relative z-10 px-8 py-12">
+        <motion.div
+          initial={{ opacity: 0, y: 28 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          className="w-full max-w-[400px]"
+        >
+          {/* Mobile logo */}
+          <div className="lg:hidden flex items-center gap-3 mb-10">
+            <Image
+              src="/imgs/invtns-logo1.png"
+              alt="in."
+              width={36}
+              height={36}
+              className="rounded-xl"
+            />
+            <Image
+              src="/imgs/innvtns-logotipo2.svg"
+              alt="Samba Innovations"
+              width={150}
+              height={24}
+              className="h-5 w-auto"
+            />
+          </div>
+
+          {/* Glass card */}
+          <div className="bg-white/[0.04] border border-white/[0.08] rounded-3xl p-8 backdrop-blur-2xl">
+
+            <div className="mb-7">
+              <h2 className="text-[22px] font-bold text-white tracking-tight">
                 Bem-vindo de volta
               </h2>
-              <p className="text-gray-500 dark:text-gray-400 text-sm mt-1.5">
+              <p className="text-white/40 text-sm mt-1">
                 Entre com suas credenciais institucionais
               </p>
             </div>
 
-            {/* Form */}
-            <form action={action} className="space-y-5">
+            <form action={action} className="space-y-4">
               {state?.error && (
                 <motion.div
                   initial={{ opacity: 0, y: -6 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="px-4 py-3 bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/25 text-red-600 dark:text-red-400 rounded-lg text-sm"
+                  className="px-4 py-3 bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl text-sm"
                 >
                   {state.error}
                 </motion.div>
@@ -161,12 +168,12 @@ export default function LoginPage() {
               <div>
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                  className="block text-[11px] font-semibold text-white/40 mb-2 uppercase tracking-widest"
                 >
-                  E-mail institucional
+                  E-mail
                 </label>
                 <div className="relative">
-                  <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                  <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/25 pointer-events-none" />
                   <input
                     id="email"
                     name="email"
@@ -174,7 +181,7 @@ export default function LoginPage() {
                     autoComplete="email"
                     required
                     placeholder="seu@escolacabral.com.br"
-                    className="w-full h-11 pl-10 pr-4 rounded-lg bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 focus:border-[#0053d4] focus:ring-2 focus:ring-[#0053d4]/10 outline-none transition-all placeholder:text-gray-300 dark:placeholder:text-gray-600 text-gray-900 dark:text-white text-sm"
+                    className="w-full h-11 pl-10 pr-4 rounded-xl bg-white/[0.06] border border-white/[0.1] focus:border-[#0053d4] focus:ring-2 focus:ring-[#0053d4]/20 outline-none transition-all placeholder:text-white/20 text-white text-sm"
                   />
                 </div>
               </div>
@@ -182,12 +189,12 @@ export default function LoginPage() {
               <div>
                 <label
                   htmlFor="password"
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                  className="block text-[11px] font-semibold text-white/40 mb-2 uppercase tracking-widest"
                 >
                   Senha
                 </label>
                 <div className="relative">
-                  <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                  <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/25 pointer-events-none" />
                   <input
                     id="password"
                     name="password"
@@ -195,7 +202,7 @@ export default function LoginPage() {
                     autoComplete="current-password"
                     required
                     placeholder="••••••••"
-                    className="w-full h-11 pl-10 pr-4 rounded-lg bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 focus:border-[#0053d4] focus:ring-2 focus:ring-[#0053d4]/10 outline-none transition-all placeholder:text-gray-300 dark:placeholder:text-gray-600 text-gray-900 dark:text-white text-sm"
+                    className="w-full h-11 pl-10 pr-4 rounded-xl bg-white/[0.06] border border-white/[0.1] focus:border-[#0053d4] focus:ring-2 focus:ring-[#0053d4]/20 outline-none transition-all placeholder:text-white/20 text-white text-sm"
                   />
                 </div>
               </div>
@@ -204,31 +211,12 @@ export default function LoginPage() {
                 <SubmitButton />
               </div>
             </form>
+          </div>
 
-            {/* Bottom note */}
-            <p className="mt-10 text-center text-xs text-gray-300 dark:text-gray-700">
-              Conexão protegida · Samba Innovations
-            </p>
-          </motion.div>
-        </div>
-
-        {/* Footer logo */}
-        <div className="pb-7 flex justify-center">
-          <Image
-            src="/imgs/invtns-logotipo.png"
-            alt="Samba Innovations"
-            width={110}
-            height={16}
-            className="h-4 w-auto opacity-20 dark:hidden"
-          />
-          <Image
-            src="/imgs/innvtns-logotipo2.svg"
-            alt="Samba Innovations"
-            width={110}
-            height={16}
-            className="h-4 w-auto opacity-10 hidden dark:block"
-          />
-        </div>
+          <p className="mt-5 text-center text-[11px] text-white/15">
+            Conexão protegida · Samba Innovations
+          </p>
+        </motion.div>
       </div>
     </div>
   );
