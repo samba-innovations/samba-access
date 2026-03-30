@@ -75,13 +75,13 @@ export default function LoginPage() {
           {/* Center: Icon mark + headline */}
           <div className="flex-1 flex flex-col justify-center">
             {/* in. icon mark */}
-            <div className="mb-9">
+            <div className="mb-9 w-[88px] h-[88px] bg-white rounded-2xl shadow-xl shadow-black/20 flex items-center justify-center p-2">
               <Image
                 src="/imgs/invtns-logo1.png"
                 alt="Samba Innovations"
-                width={88}
-                height={88}
-                className="rounded-2xl"
+                width={72}
+                height={72}
+                className="rounded-xl"
               />
             </div>
 
