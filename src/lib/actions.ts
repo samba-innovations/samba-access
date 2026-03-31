@@ -9,7 +9,7 @@ import { createToken, cookieOptions, getSession, SessionUser } from './auth'
 const COOKIE_NAME = 'samba_token'
 
 // Projetos liberados por padrão para todos os usuários
-const DEFAULT_PROJECTS = ['code', 'edvance']
+const DEFAULT_PROJECTS = ['code', 'edvance', 'paper']
 
 // ─── Helpers ───────────────────────────────────────────────────────────────
 
