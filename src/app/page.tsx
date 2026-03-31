@@ -2,9 +2,10 @@ import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
 import { createSsoToken, getAvatarUrl } from "@/lib/actions";
 import { SystemCards } from "@/components/SystemCards";
-import { ShieldCheck } from "lucide-react";
+import { ShieldCheck, Sprout, Lock } from "lucide-react";
 import { NavLogo } from "@/components/NavLogo";
 import { NavUserMenu } from "@/components/NavUserMenu";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import Image from "next/image";
 
 export const dynamic = "force-dynamic";
@@ -47,10 +48,21 @@ export default async function HomePage() {
       logoAspect: "square" as const,
       badge: "Hortas IoT",
     },
+    {
+      key: "paper",
+      name: "samba paper",
+      description: "Gerador de documentos pedagógicos: planos de aula, guias, PEI, eletivas, EMA, projetos e PDI.",
+      url: process.env.URL_PAPER!,
+      gradient: "from-[#FCE31D] to-[#b64c96]",
+      accent: "#b64c96",
+      logo: "/imgs/paper-logo2.svg",
+      logoAspect: "square" as const,
+      badge: "Documentos",
+    },
   ];
 
   // Filtra sistemas que o usuário tem acesso e gera tokens SSO
-  const accessibleSystems = SYSTEMS.filter(s => session.projects?.includes(s.key) ?? s.key !== "flourish");
+  const accessibleSystems = SYSTEMS.filter(s => session.projects?.includes(s.key) ?? !["flourish"].includes(s.key));
 
   const adminUrl = process.env.URL_ADMIN ?? null;
 
@@ -90,11 +102,14 @@ export default async function HomePage() {
         <div className="max-w-6xl mx-auto px-6 h-[60px] flex items-center justify-between">
           <NavLogo />
 
-          <NavUserMenu
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <NavUserMenu
             session={{ ...session, avatarUrl }}
             adminUrl={adminUrl ?? undefined}
             adminToken={adminToken}
-          />
+            />
+          </div>
         </div>
       </header>
 
@@ -132,6 +147,36 @@ export default async function HomePage() {
             Sistemas disponíveis
           </p>
           <SystemCards systems={systemsWithTokens} />
+
+          {/* Coming soon */}
+          <div className="mt-8">
+            <p className="text-[11px] font-semibold text-muted-foreground/50 uppercase tracking-widest mb-4">Em breve</p>
+            <div className="relative bg-card rounded-3xl border border-dashed border-border/60 overflow-hidden flex flex-col sm:flex-row items-center gap-5 p-6 opacity-70">
+              <div className="h-[3px] absolute top-0 left-0 right-0 bg-gradient-to-r from-emerald-500/60 to-emerald-400/30 rounded-t-3xl" />
+              <div
+                className="w-16 h-16 rounded-2xl flex items-center justify-center shrink-0"
+                style={{ background: "rgba(149,193,31,0.12)" }}
+              >
+                <Image src="/imgs/flourish-logo2.svg" alt="samba flourish" width={40} height={40} className="object-contain" />
+              </div>
+              <div className="flex-1 text-center sm:text-left">
+                <div className="flex items-center justify-center sm:justify-start gap-2 mb-1">
+                  <span className="font-bold text-foreground text-[15px]">samba flourish</span>
+                  <span className="flex items-center gap-1 text-[9px] font-bold uppercase tracking-widest px-2 py-1 rounded-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
+                    <Sprout size={9} />
+                    Monitoramento IoT
+                  </span>
+                </div>
+                <p className="text-muted-foreground text-xs leading-relaxed">
+                  Central de monitoramento de hortas com sensores Arduino em tempo real. Em desenvolvimento.
+                </p>
+              </div>
+              <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-muted/40 border border-border text-muted-foreground/50 text-xs font-semibold shrink-0">
+                <Lock size={12} />
+                Em breve
+              </div>
+            </div>
+          </div>
         </div>
       </main>
 

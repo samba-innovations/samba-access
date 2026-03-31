@@ -5,13 +5,32 @@ import { useFormStatus } from "react-dom";
 import { motion } from "framer-motion";
 import { Loader2, Lock, Mail, ArrowRight, ShieldCheck } from "lucide-react";
 import Image from "next/image";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 import { login } from "@/lib/actions";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const PRODUCTS = [
-  { id: "code",     label: "samba code",    logo: "/imgs/code-logo2.svg" },
-  { id: "edvance",  label: "samba edvance", logo: "/imgs/edvance-logo2.svg" },
-  { id: "flourish", label: "samba flourish",logo: "/imgs/flourish-logo2.svg" },
+  { id: "code",    label: "samba code",    logo: "/imgs/code-logo2.svg" },
+  { id: "edvance", label: "samba edvance", logo: "/imgs/edvance-logo2.svg" },
+  { id: "paper",   label: "samba paper",   logo: "/imgs/paper-logo2.svg" },
 ];
+
+function LogoType() {
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return <div className="h-10 w-[280px]" />;
+  return (
+    <Image
+      src={resolvedTheme === "dark" ? "/imgs/innvtns-logotipo2.svg" : "/imgs/innvtns-logotipo.svg"}
+      alt="Samba Innovations"
+      width={280}
+      height={44}
+      className="h-10 w-auto"
+    />
+  );
+}
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -21,7 +40,7 @@ function SubmitButton() {
       whileTap={!pending ? { scale: 0.985 } : {}}
       disabled={pending}
       type="submit"
-      className="w-full h-[52px] bg-[#0053d4] text-white rounded-xl font-semibold transition-colors hover:bg-[#0047b8] flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed text-sm tracking-wide"
+      className="w-full h-[52px] bg-primary text-white rounded-xl font-semibold transition-colors hover:bg-primary/90 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed text-sm tracking-wide"
     >
       {pending ? (
         <><Loader2 className="w-4 h-4 animate-spin" />Autenticando…</>
@@ -36,17 +55,22 @@ export default function LoginPage() {
   const [state, action] = useActionState(login, null);
 
   return (
-    <div className="min-h-screen bg-[#07090f] flex relative overflow-hidden">
+    <div className="min-h-screen bg-background flex relative overflow-hidden">
 
-      {/* ── Mesh gradient (full bleed) ────────────────────────────── */}
+      {/* Theme toggle */}
+      <div className="absolute top-4 right-4 z-50">
+        <ThemeToggle />
+      </div>
+
+      {/* Background blobs */}
       <div className="absolute inset-0 pointer-events-none select-none">
-        <div className="absolute -top-48 -left-32 w-[680px] h-[680px] bg-[#0053d4]/14 rounded-full blur-[140px]" />
-        <div className="absolute -bottom-40 right-[10%] w-[580px] h-[580px] bg-[#002fa0]/18 rounded-full blur-[120px]" />
-        <div className="absolute top-[30%] right-[40%] w-[340px] h-[340px] bg-[#0060ff]/7 rounded-full blur-[100px]" />
+        <div className="absolute -top-48 -left-32 w-[680px] h-[680px] bg-primary/10 dark:bg-primary/12 rounded-full blur-[140px]" />
+        <div className="absolute -bottom-40 right-[10%] w-[580px] h-[580px] bg-primary/8 dark:bg-primary/14 rounded-full blur-[120px]" />
+        <div className="absolute top-[30%] right-[40%] w-[340px] h-[340px] bg-primary/5 dark:bg-primary/6 rounded-full blur-[100px]" />
         <div
-          className="absolute inset-0 opacity-[0.022]"
+          className="absolute inset-0 opacity-[0.015] dark:opacity-[0.022]"
           style={{
-            backgroundImage: "radial-gradient(circle, white 1px, transparent 1px)",
+            backgroundImage: "radial-gradient(circle, currentColor 1px, transparent 1px)",
             backgroundSize: "40px 40px",
           }}
         />
@@ -55,12 +79,12 @@ export default function LoginPage() {
       {/* ══════════════════════════════════════════════════════════════
           LEFT PANEL — brand + ecosystem
       ══════════════════════════════════════════════════════════════ */}
-      <div className="hidden lg:flex w-1/2 flex-col items-center justify-center relative z-10 border-r border-white/[0.05] px-12 py-16">
+      <div className="hidden lg:flex w-1/2 flex-col items-center justify-center relative z-10 border-r border-border/50 px-12 py-16">
         <div className="flex flex-col items-center text-center max-w-[420px]">
 
           {/* Icon with blue glow */}
           <div className="relative inline-flex mb-10">
-            <div className="absolute inset-0 scale-[1.4] bg-[#0053d4]/28 rounded-3xl blur-2xl" />
+            <div className="absolute inset-0 scale-[1.4] bg-primary/20 dark:bg-primary/28 rounded-3xl blur-2xl" />
             <Image
               src="/imgs/invtns-logo1.png"
               alt="Samba Innovations"
@@ -72,13 +96,13 @@ export default function LoginPage() {
           </div>
 
           {/* Headline */}
-          <h1 className="text-[62px] font-black text-white leading-[0.96] tracking-tight mb-6">
+          <h1 className="text-[62px] font-black text-foreground leading-[0.96] tracking-tight mb-6">
             Acesso<br />
-            <span className="text-[#4d9fff]">Unificado.</span>
+            <span className="text-primary">Unificado.</span>
           </h1>
 
           {/* Tagline */}
-          <p className="text-white/35 text-[15px] leading-relaxed mb-12">
+          <p className="text-muted-foreground text-[15px] leading-relaxed mb-12">
             Portal de entrada único para todos os sistemas educacionais da Escola Cabral.
           </p>
 
@@ -87,7 +111,7 @@ export default function LoginPage() {
             {PRODUCTS.map((p) => (
               <div
                 key={p.id}
-                className="flex items-center gap-[10px] px-[18px] py-[10px] rounded-2xl bg-white/[0.06] border border-white/[0.09]"
+                className="flex items-center gap-[10px] px-[18px] py-[10px] rounded-2xl bg-muted/60 border border-border"
               >
                 <Image
                   src={p.logo}
@@ -96,7 +120,7 @@ export default function LoginPage() {
                   height={22}
                   className="shrink-0"
                 />
-                <span className="text-white/50 text-[12.5px] font-medium tracking-wide">
+                <span className="text-muted-foreground text-[12.5px] font-medium tracking-wide">
                   {p.label}
                 </span>
               </div>
@@ -123,29 +147,23 @@ export default function LoginPage() {
           {/* Mobile logo */}
           <div className="lg:hidden flex items-center gap-3 mb-10">
             <Image src="/imgs/invtns-logo1.png" alt="in." width={36} height={36} className="rounded-xl" />
-            <Image src="/imgs/innvtns-logotipo2.svg" alt="Samba Innovations" width={150} height={24} className="h-5 w-auto" />
+            <LogoType />
           </div>
 
           {/* Logotype — título de marca acima do card */}
           <div className="mb-8 flex flex-col items-center gap-3">
-            <Image
-              src="/imgs/innvtns-logotipo2.svg"
-              alt="Samba Innovations"
-              width={280}
-              height={44}
-              className="h-10 w-auto"
-            />
-            <div className="h-px w-16 bg-white/[0.12]" />
+            <LogoType />
+            <div className="h-px w-16 bg-border" />
           </div>
 
-          {/* Glass card — 10% maior */}
-          <div className="w-full bg-white/[0.04] border border-white/[0.08] rounded-3xl p-9 backdrop-blur-2xl">
+          {/* Card */}
+          <div className="w-full bg-card border border-border rounded-3xl p-9 shadow-[0_4px_32px_rgba(0,0,0,0.06)] dark:shadow-[0_4px_32px_rgba(0,0,0,0.4)]">
 
             <div className="mb-7">
-              <h2 className="text-[22px] font-bold text-white tracking-tight text-center">
+              <h2 className="text-[22px] font-bold text-foreground tracking-tight text-center">
                 Bem-vindo de volta
               </h2>
-              <p className="text-white/40 text-sm mt-1.5 text-center">
+              <p className="text-muted-foreground text-sm mt-1.5 text-center">
                 Entre com suas credenciais institucionais
               </p>
             </div>
@@ -164,12 +182,12 @@ export default function LoginPage() {
               <div>
                 <label
                   htmlFor="email"
-                  className="block text-[11px] font-semibold text-white/40 mb-2 uppercase tracking-widest"
+                  className="block text-[11px] font-semibold text-muted-foreground mb-2 uppercase tracking-widest"
                 >
                   E-mail
                 </label>
                 <div className="relative">
-                  <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/25 pointer-events-none" />
+                  <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/50 pointer-events-none" />
                   <input
                     id="email"
                     name="email"
@@ -177,7 +195,7 @@ export default function LoginPage() {
                     autoComplete="email"
                     required
                     placeholder="seu@escolacabral.com.br"
-                    className="w-full h-12 pl-10 pr-4 rounded-xl bg-white/[0.06] border border-white/[0.1] focus:border-[#0053d4] focus:ring-2 focus:ring-[#0053d4]/20 outline-none transition-all placeholder:text-white/20 text-white text-sm"
+                    className="w-full h-12 pl-10 pr-4 rounded-xl bg-muted/50 border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all placeholder:text-muted-foreground/40 text-foreground text-sm"
                   />
                 </div>
               </div>
@@ -185,12 +203,12 @@ export default function LoginPage() {
               <div>
                 <label
                   htmlFor="password"
-                  className="block text-[11px] font-semibold text-white/40 mb-2 uppercase tracking-widest"
+                  className="block text-[11px] font-semibold text-muted-foreground mb-2 uppercase tracking-widest"
                 >
                   Senha
                 </label>
                 <div className="relative">
-                  <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/25 pointer-events-none" />
+                  <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/50 pointer-events-none" />
                   <input
                     id="password"
                     name="password"
@@ -198,7 +216,7 @@ export default function LoginPage() {
                     autoComplete="current-password"
                     required
                     placeholder="••••••••"
-                    className="w-full h-12 pl-10 pr-4 rounded-xl bg-white/[0.06] border border-white/[0.1] focus:border-[#0053d4] focus:ring-2 focus:ring-[#0053d4]/20 outline-none transition-all placeholder:text-white/20 text-white text-sm"
+                    className="w-full h-12 pl-10 pr-4 rounded-xl bg-muted/50 border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all placeholder:text-muted-foreground/40 text-foreground text-sm"
                   />
                 </div>
               </div>
@@ -212,18 +230,18 @@ export default function LoginPage() {
 
         {/* Footer institucional */}
         <footer className="w-full max-w-[440px] mt-10 flex flex-col items-center gap-3">
-          <div className="flex items-center gap-2 text-white/20">
+          <div className="flex items-center gap-2 text-muted-foreground/40">
             <ShieldCheck className="w-3.5 h-3.5" strokeWidth={1.5} />
             <span className="text-[11px] tracking-wide">Conexão criptografada e protegida</span>
           </div>
-          <div className="h-px w-full bg-white/[0.06]" />
-          <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-[11px] text-white/20 text-center">
+          <div className="h-px w-full bg-border/50" />
+          <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-[11px] text-muted-foreground/40 text-center">
             <span>Escola Cabral</span>
-            <span className="text-white/10">·</span>
+            <span className="text-muted-foreground/20">·</span>
             <span>Sistema de Gestão Educacional</span>
-            <span className="text-white/10">·</span>
+            <span className="text-muted-foreground/20">·</span>
             <span>Powered by Samba Innovations</span>
-            <span className="text-white/10">·</span>
+            <span className="text-muted-foreground/20">·</span>
             <span>{new Date().getFullYear()}</span>
           </div>
         </footer>
