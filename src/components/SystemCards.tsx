@@ -1,13 +1,14 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowUpRight, ClipboardList, BarChart3, Sprout } from "lucide-react";
+import { ArrowUpRight, ClipboardList, BarChart3, Sprout, FileText } from "lucide-react";
 import Image from "next/image";
 
 const SYSTEM_ICONS: Record<string, React.ReactNode> = {
   code: <ClipboardList className="w-4 h-4" strokeWidth={1.5} />,
   edvance: <BarChart3 className="w-4 h-4" strokeWidth={1.5} />,
   flourish: <Sprout className="w-4 h-4" strokeWidth={1.5} />,
+  paper: <FileText className="w-4 h-4" strokeWidth={1.5} />,
 };
 
 interface System {
