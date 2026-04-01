@@ -148,7 +148,8 @@ export default async function HomePage() {
           </p>
           <SystemCards systems={systemsWithTokens} />
 
-          {/* Coming soon */}
+          {/* Coming soon — só mostra se o usuário ainda não tem acesso ao flourish */}
+          {!session.projects?.includes("flourish") && (
           <div className="mt-8">
             <p className="text-[11px] font-semibold text-muted-foreground/50 uppercase tracking-widest mb-4">Em breve</p>
             <div className="relative bg-card rounded-3xl border border-dashed border-border/60 overflow-hidden flex flex-col sm:flex-row items-center gap-5 p-6 opacity-70">
@@ -177,6 +178,7 @@ export default async function HomePage() {
               </div>
             </div>
           </div>
+          )}
         </div>
       </main>
 
