@@ -11,6 +11,9 @@ const COOKIE_NAME = 'samba_token'
 // Projetos liberados por padrão para todos os usuários
 const DEFAULT_PROJECTS = ['code', 'edvance', 'paper']
 
+// Projetos liberados automaticamente para admins (is_admin = true)
+const ADMIN_PROJECTS = ['flourish']
+
 // ─── Helpers ───────────────────────────────────────────────────────────────
 
 async function buildSession(user: {
@@ -22,7 +25,8 @@ async function buildSession(user: {
     SELECT project FROM samba_school.user_project_access WHERE user_id = ${user.id}
   `
   const extraProjects = accessRows.map(r => r.project).filter(p => !DEFAULT_PROJECTS.includes(p))
-  const projects = [...DEFAULT_PROJECTS, ...extraProjects]
+  const adminProjects = user.is_admin ? ADMIN_PROJECTS.filter(p => !extraProjects.includes(p)) : []
+  const projects = [...DEFAULT_PROJECTS, ...extraProjects, ...adminProjects]
 
   return {
     id: user.id,
@@ -87,13 +91,18 @@ export async function createSsoToken(userId: number, target: string): Promise<st
     `
     if (!rows[0]?.is_admin) return null
   }
-  // flourish (e outros não-padrão): requer acesso explícito
+  // projetos não-padrão (ex: flourish): admins têm acesso automático; demais requerem acesso explícito
   else if (!DEFAULT_PROJECTS.includes(target)) {
-    const access = await prisma.$queryRaw<Array<{ user_id: number }>>`
-      SELECT user_id FROM samba_school.user_project_access
-      WHERE user_id = ${userId} AND project = ${target}
+    const adminRow = await prisma.$queryRaw<Array<{ is_admin: boolean }>>`
+      SELECT is_admin FROM samba_school.users WHERE id = ${userId}
     `
-    if (access.length === 0) return null
+    if (!adminRow[0]?.is_admin) {
+      const access = await prisma.$queryRaw<Array<{ user_id: number }>>`
+        SELECT user_id FROM samba_school.user_project_access
+        WHERE user_id = ${userId} AND project = ${target}
+      `
+      if (access.length === 0) return null
+    }
   }
 
   const expiresAt = new Date(Date.now() + 30 * 1000)
