@@ -1,6 +1,9 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
 import { getUsers, getRoles } from "@/lib/actions";
+
+export const metadata: Metadata = { title: "Usuários" };
 import { UsersClient } from "@/components/UsersClient";
 
 export default async function UsuariosPage() {

@@ -1,7 +1,14 @@
+import type { Metadata } from "next";
 import { redirect, notFound } from "next/navigation";
 import { getSession } from "@/lib/auth";
 import { getUserById, getRoles } from "@/lib/actions";
 import { UserEditClient } from "@/components/UserEditClient";
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params;
+  const user = await getUserById(parseInt(id, 10));
+  return { title: user ? `Editar — ${user.name}` : "Editar Usuário" };
+}
 
 interface Props {
   params: Promise<{ id: string }>;

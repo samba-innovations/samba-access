@@ -1,6 +1,9 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
 import { createSsoToken, getAvatarUrl } from "@/lib/actions";
+
+export const metadata: Metadata = { title: { absolute: "samba access" } };
 import { SystemCards } from "@/components/SystemCards";
 import { ShieldCheck, Sprout, Lock } from "lucide-react";
 import { NavLogo } from "@/components/NavLogo";
