@@ -11,8 +11,8 @@ const COOKIE_NAME = 'samba_token'
 // Projetos liberados por padrão para todos os usuários
 const DEFAULT_PROJECTS = ['code', 'edvance', 'paper']
 
-// Projetos liberados automaticamente para admins (is_admin = true)
-const ADMIN_PROJECTS = ['flourish']
+// Projetos liberados automaticamente para admins (sem linha em user_project_access)
+const ADMIN_PROJECTS = ['flourish', 'radio']
 
 // ─── Helpers ───────────────────────────────────────────────────────────────
 
@@ -91,12 +91,12 @@ export async function createSsoToken(userId: number, target: string): Promise<st
     `
     if (!rows[0]?.is_admin) return null
   }
-  // projetos não-padrão (ex: flourish): admins têm acesso automático; demais requerem acesso explícito
+  // projetos não-padrão: admins passam direto, outros precisam de acesso explícito
   else if (!DEFAULT_PROJECTS.includes(target)) {
-    const adminRow = await prisma.$queryRaw<Array<{ is_admin: boolean }>>`
+    const userRow = await prisma.$queryRaw<Array<{ is_admin: boolean }>>`
       SELECT is_admin FROM samba_school.users WHERE id = ${userId}
     `
-    if (!adminRow[0]?.is_admin) {
+    if (!userRow[0]?.is_admin) {
       const access = await prisma.$queryRaw<Array<{ user_id: number }>>`
         SELECT user_id FROM samba_school.user_project_access
         WHERE user_id = ${userId} AND project = ${target}
