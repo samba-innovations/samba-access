@@ -62,6 +62,18 @@ export default async function HomePage() {
       logoAspect: "square" as const,
       badge: "Documentos",
     },
+    {
+      key: "pombo",
+      name: "pombo news",
+      description: "Jornal estudantil da Escola Christino Cabral. Publique matérias, gerencie editorias e acompanhe o jornal.",
+      url: process.env.URL_POMBO!,
+      gradient: "from-[#1a1209] to-[#c0392b]",
+      accent: "#c0392b",
+      logo: "/imgs/pombo-logo1.svg",
+      logoAspect: "square" as const,
+      logoDarkInvert: true,
+      badge: "Jornal",
+    },
   ];
 
   // Filtra sistemas que o usuário tem acesso e gera tokens SSO

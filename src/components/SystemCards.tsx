@@ -1,14 +1,15 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowUpRight, ClipboardList, BarChart3, Sprout, FileText } from "lucide-react";
+import { ArrowUpRight, ClipboardList, BarChart3, Sprout, FileText, Newspaper } from "lucide-react";
 import Image from "next/image";
 
 const SYSTEM_ICONS: Record<string, React.ReactNode> = {
-  code: <ClipboardList className="w-4 h-4" strokeWidth={1.5} />,
-  edvance: <BarChart3 className="w-4 h-4" strokeWidth={1.5} />,
-  flourish: <Sprout className="w-4 h-4" strokeWidth={1.5} />,
-  paper: <FileText className="w-4 h-4" strokeWidth={1.5} />,
+  code:    <ClipboardList className="w-4 h-4" strokeWidth={1.5} />,
+  edvance: <BarChart3     className="w-4 h-4" strokeWidth={1.5} />,
+  flourish:<Sprout        className="w-4 h-4" strokeWidth={1.5} />,
+  paper:   <FileText      className="w-4 h-4" strokeWidth={1.5} />,
+  pombo:   <Newspaper     className="w-4 h-4" strokeWidth={1.5} />,
 };
 
 interface System {
@@ -20,6 +21,7 @@ interface System {
   accent: string;
   logo: string;
   logoAspect: "square" | "wide";
+  logoDarkInvert?: boolean;
   badge: string;
   token: string;
 }
@@ -69,7 +71,7 @@ export function SystemCards({ systems }: { systems: System[] }) {
                   alt={sys.name}
                   width={64}
                   height={64}
-                  className="w-16 h-16 object-contain drop-shadow-sm"
+                  className={`w-16 h-16 object-contain drop-shadow-sm${sys.logoDarkInvert ? " dark:invert" : ""}`}
                 />
               </motion.div>
 
