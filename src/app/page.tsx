@@ -81,7 +81,7 @@ export default async function HomePage() {
       url: process.env.URL_CONTROL!,
       gradient: "from-[#4b0000] to-[#e30613]",
       accent: "#e30613",
-      logo: "/imgs/control-logotipo2.svg",
+      logo: "/imgs/control-logo1.svg",
       logoAspect: "square" as const,
       badge: "Gestão Escolar",
     },
