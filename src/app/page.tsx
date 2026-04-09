@@ -74,10 +74,25 @@ export default async function HomePage() {
       logoDarkInvert: true,
       badge: "Jornal",
     },
+    {
+      key: "control",
+      name: "samba control",
+      description: "Gestão centralizada do banco mestre: professores, alunos, turmas e disciplinas.",
+      url: process.env.URL_CONTROL!,
+      gradient: "from-[#4b0000] to-[#e30613]",
+      accent: "#e30613",
+      logo: "/imgs/control-logotipo2.svg",
+      logoAspect: "square" as const,
+      badge: "Gestão Escolar",
+    },
   ];
 
   // Filtra sistemas que o usuário tem acesso e gera tokens SSO
-  const accessibleSystems = SYSTEMS.filter(s => session.projects?.includes(s.key) ?? !["flourish"].includes(s.key));
+  // control: apenas admins ou com acesso explícito
+  const accessibleSystems = SYSTEMS.filter(s => {
+    if (s.key === "control") return session.isAdmin || session.projects?.includes("control");
+    return session.projects?.includes(s.key) ?? !["flourish"].includes(s.key);
+  });
 
   const adminUrl = process.env.URL_ADMIN ?? null;
 
