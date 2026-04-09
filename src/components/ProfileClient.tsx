@@ -31,7 +31,22 @@ function AvatarUpload({ session }: Props) {
   function handleFile(file: File) {
     if (!file.type.startsWith("image/")) return;
     const reader = new FileReader();
-    reader.onload = (e) => setPreview(e.target?.result as string);
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const MAX = 400;
+        const scale = Math.min(1, MAX / Math.max(img.width, img.height));
+        const w = Math.round(img.width * scale);
+        const h = Math.round(img.height * scale);
+        const canvas = document.createElement("canvas");
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext("2d")!;
+        ctx.drawImage(img, 0, 0, w, h);
+        setPreview(canvas.toDataURL("image/jpeg", 0.75));
+      };
+      img.src = e.target?.result as string;
+    };
     reader.readAsDataURL(file);
   }
 
@@ -77,7 +92,7 @@ function AvatarUpload({ session }: Props) {
       />
 
       <p className="text-[11px] text-muted-foreground text-center leading-tight">
-        Clique ou arraste · JPG, PNG, WEBP · máx. 500KB
+        Clique ou arraste · JPG, PNG, WEBP · redimensionado automaticamente
       </p>
 
       {preview && (
