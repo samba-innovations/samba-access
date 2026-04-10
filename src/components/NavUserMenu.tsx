@@ -39,6 +39,7 @@ const ROLE_LABELS: Record<string, string> = {
   ADMIN: "Administrador",
   TEACHER: "Professor",
   COORDINATOR: "Coordenador",
+  COORDINATOR_TEACHER: "Coord. Professor",
   PRINCIPAL: "Diretor",
   VICE_PRINCIPAL: "Vice-Diretor",
   SECRETARY: "Secretário",

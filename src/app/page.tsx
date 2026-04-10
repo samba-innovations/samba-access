@@ -88,7 +88,7 @@ export default async function HomePage() {
     },
   ];
 
-  const COORDINATOR_ROLES = ["COORDINATOR", "COORDINATOR_TEACHER"];
+  const COORDINATOR_ROLES = ["COORDINATOR", "COORDINATOR_TEACHER", "PRINCIPAL", "VICE_PRINCIPAL"];
 
   // Filtra sistemas que o usuário tem acesso e gera tokens SSO
   // control: admins, coordenadores ou com acesso explícito
