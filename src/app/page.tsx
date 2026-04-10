@@ -84,13 +84,16 @@ export default async function HomePage() {
       logo: "/imgs/control-logo2.svg",
       logoAspect: "square" as const,
       badge: "Gestão Escolar",
+      coordinatorOnly: true,
     },
   ];
 
+  const COORDINATOR_ROLES = ["COORDINATOR", "COORDINATOR_TEACHER"];
+
   // Filtra sistemas que o usuário tem acesso e gera tokens SSO
-  // control: apenas admins ou com acesso explícito
+  // control: admins, coordenadores ou com acesso explícito
   const accessibleSystems = SYSTEMS.filter(s => {
-    if (s.key === "control") return session.isAdmin || session.projects?.includes("control");
+    if (s.key === "control") return session.isAdmin || COORDINATOR_ROLES.includes(session.role) || session.projects?.includes("control");
     return session.projects?.includes(s.key) ?? !["flourish"].includes(s.key);
   });
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowUpRight, ClipboardList, BarChart3, Sprout, FileText, Newspaper } from "lucide-react";
+import { ArrowUpRight, ClipboardList, BarChart3, Sprout, FileText, Newspaper, ShieldAlert } from "lucide-react";
 import Image from "next/image";
 
 const SYSTEM_ICONS: Record<string, React.ReactNode> = {
@@ -24,6 +24,7 @@ interface System {
   logoDarkInvert?: boolean;
   badge: string;
   token: string;
+  coordinatorOnly?: boolean;
 }
 
 export function SystemCards({ systems }: { systems: System[] }) {
@@ -59,6 +60,15 @@ export function SystemCards({ systems }: { systems: System[] }) {
                 className="absolute top-0 left-0 right-0 h-[3px]"
                 style={{ background: `linear-gradient(90deg, ${sys.accent}, ${sys.accent}88)` }}
               />
+
+              {/* Coordinator-only notice */}
+              {sys.coordinatorOnly && (
+                <div className="absolute top-3 left-3 flex items-center gap-1 px-2 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest border"
+                  style={{ backgroundColor: `${sys.accent}20`, borderColor: `${sys.accent}50`, color: sys.accent }}>
+                  <ShieldAlert className="w-3 h-3" strokeWidth={2} />
+                  Coordenadores
+                </div>
+              )}
 
               {/* Logo */}
               <motion.div
@@ -115,6 +125,15 @@ export function SystemCards({ systems }: { systems: System[] }) {
                 Acessar sistema
                 <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </div>
+
+              {/* Coordinator-only footer notice */}
+              {sys.coordinatorOnly && (
+                <div className="flex items-center gap-1.5 mt-2 px-3 py-2 rounded-xl text-[10px] font-bold"
+                  style={{ backgroundColor: `${sys.accent}12`, color: sys.accent }}>
+                  <ShieldAlert className="w-3.5 h-3.5 shrink-0" strokeWidth={2} />
+                  Exclusivo para coordenadores
+                </div>
+              )}
             </div>
           </motion.a>
         );
