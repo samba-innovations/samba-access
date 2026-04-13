@@ -86,14 +86,28 @@ export default async function HomePage() {
       badge: "Gestão Escolar",
       coordinatorOnly: true,
     },
+    {
+      key: "gate",
+      name: "samba gate",
+      description: "Controle de entrada e saída de alunos. Registro de atrasos e saídas antecipadas com histórico completo.",
+      url: process.env.URL_GATE!,
+      gradient: "from-[#1b243b] to-[#2d5be3]",
+      accent: "#1b243b",
+      logo: "/imgs/gate-logo2.svg",
+      logoAspect: "square" as const,
+      badge: "Portaria",
+    },
   ];
 
   const COORDINATOR_ROLES = ["COORDINATOR", "COORDINATOR_TEACHER", "PRINCIPAL", "VICE_PRINCIPAL"];
 
   // Filtra sistemas que o usuário tem acesso e gera tokens SSO
   // control: admins, coordenadores ou com acesso explícito
+  const GATE_ROLES = ["ADMIN", "SECRETARY", "PRINCIPAL", "VICE_PRINCIPAL", "COORDINATOR"];
+
   const accessibleSystems = SYSTEMS.filter(s => {
     if (s.key === "control") return session.isAdmin || COORDINATOR_ROLES.includes(session.role) || session.projects?.includes("control");
+    if (s.key === "gate")    return session.isAdmin || GATE_ROLES.includes(session.role?.toUpperCase());
     return session.projects?.includes(s.key) ?? !["flourish"].includes(s.key);
   });
 
